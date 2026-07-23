@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - principal
+
+  pull_request:
+    branches:
+      - principal
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mostrar archivos
+        run: ls -la
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ejecutar prueba
+        run: echo "Prueba ejecutada correctamente"
+
+  integration:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Crear reporte
+        run: echo "Pipeline ejecutado correctamente" > reporte.txt
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: Reporte
+          path: reporte.txt
